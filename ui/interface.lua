@@ -10,6 +10,11 @@ getgenv().luaguardvars = {
 
 local library = import("ui/framework.lua")
 
+if not library then
+	warn("[UI] Failed to import ui/framework.lua")
+	return
+end
+
 library:init()
 
 local Window = library.NewWindow({

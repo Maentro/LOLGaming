@@ -4,18 +4,25 @@ getgenv().Hooks = {}
 getgenv().ModulesLoaded = false
 
 import('bypass.lua')
-local start_time = os.clock()
+
+-- Wait until bypass sets ModulesLoaded and shared.require becomes available.
 repeat
     task.wait()
-until getgenv().ModulesLoaded or (os.clock() - start_time) > 5
-
-if not getgenv().ModulesLoaded then
-    warn("[Modules] bypass.lua did not enable ModulesLoaded; continuing without it")
-    getgenv().ModulesLoaded = true
-end
+until getgenv().ModulesLoaded
 print("Modules loaded. Injecting")
 
 import('players.lua')
+
+-- Ensure LocalPlayer exists before modules that reference it.
+local start_localplayer = os.clock()
+repeat
+    task.wait()
+until (getgenv().PlayerService and getgenv().PlayerService.LocalPlayer) or (os.clock() - start_localplayer) > 20
+
+if not (getgenv().PlayerService and getgenv().PlayerService.LocalPlayer) then
+    warn("[Players] LocalPlayer is nil; aborting further module injection")
+    return
+end
 
 --esp
 import('esp/lines.lua')

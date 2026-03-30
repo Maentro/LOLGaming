@@ -3,7 +3,8 @@ local version_info = {
     version = "0.1",
 }
 
-local root_url = version_info.debug and "http://localhost:8000/" or "https://raw.githubusercontent.com/Maentro/LOLGaming/main/"
+-- Source for the imported modules (bypass/players/ui/etc).
+local root_url = version_info.debug and "http://localhost:8000/" or "https://raw.githubusercontent.com/cyr0zn/Specter/main/"
 
 local debug_print = version_info.debug and function(T, ...)
     return warn("debug: "..T:format(...))
